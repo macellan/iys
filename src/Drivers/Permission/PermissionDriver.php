@@ -69,6 +69,6 @@ class PermissionDriver extends AbstractDriver
 
     private function buildUrl(string $api): string
     {
-        return  $this->baseUrl . "/sps/$this->iysCode/brands/$this->branchCode/$api";
+        return sprintf('%s/sps/%s/brands/%s/%s', $this->baseUrl, $this->iysCode, $this->branchCode, $api);
     }
 }
