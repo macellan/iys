@@ -148,6 +148,20 @@ You can get changed permission by IYS
    IysManager::make()->createPermissionDriver()->getChangedPermissions();
 ```
 
+You can get permission status by permission model
+
+```php
+    IysManager::make()->createPermissionDriver()->getPermissionStatus(
+            Permission::make()
+                ->setConsentDate('2022-02-10 09:50:02')
+                ->setSource(ConsentSourceTypes::MOBILE)
+                ->setRecipient('example@.com')
+                ->setRecipientType(RecipientTypes::INDIVIDUAL)
+                ->setStatus(StatusTypes::APPROVE)
+                ->setType(PermissionTypes::EMAIL)
+    );
+```
+
 ## Testing
 
 ``` bash

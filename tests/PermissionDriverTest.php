@@ -433,4 +433,72 @@ class PermissionDriverTest extends TestCase
 
         IysManager::make()->createPermissionDriver()->getChangedPermissions();
     }
+
+    /**
+     * @throws RequestException
+     */
+    public function test_get_permission_status()
+    {
+        $recipient = 'test@example.com';
+
+        $consentDate = '2020-07-08 07:07:07';
+
+        $endpoint = "/sps/$this->iysCode/brands/$this->brandCode/consents/status";
+
+        $this->createHttpFakeToken();
+
+        Http::fake([
+            $endpoint => Http::response([
+                    'consentDate' => $consentDate,
+                    'source' => ConsentSourceTypes::MOBILE,
+                    'recipientType' => RecipientTypes::INDIVIDUAL,
+                    'status' => StatusTypes::APPROVE,
+                    'type' => PermissionTypes::EMAIL,
+                    'recipient' => $recipient,
+                    'retailerCode' => 55550127,
+                    'creationDate' => '2020-08-06 15:50:23',
+                    'retailerTitle' => 'Test Company',
+                    'retailerAccessCount' => 3,
+                    'transactionId' => 'abc623z3cq4bhac9b88dadd49b767a2322be140a9n9cuc25abf1ac5392c4ca12',
+                ])
+            ]);
+
+        IysManager::make()->createPermissionDriver()->getPermissionStatus(Permission::make()
+            ->setConsentDate($consentDate)
+            ->setSource(ConsentSourceTypes::MOBILE)
+            ->setRecipient($recipient)
+            ->setRecipientType(RecipientTypes::INDIVIDUAL)
+            ->setStatus(StatusTypes::APPROVE)
+            ->setType(PermissionTypes::EMAIL));
+
+        Http::assertSent(function (Request $request) use ($endpoint, $recipient) {
+            return $request->url() == $this->url . $endpoint &&
+                $request['recipient'] == $recipient &&
+                $request['recipientType'] == RecipientTypes::INDIVIDUAL->value &&
+                $request['type'] == PermissionTypes::EMAIL->value;
+        });
+    }
+
+    public function test_throw_exception_get_permission_status()
+    {
+        $endpoint = "/sps/$this->iysCode/brands/$this->brandCode/consents/status";
+
+        $this->createHttpFakeToken();
+
+        Http::fake([
+            $endpoint => Http::response([
+                [
+                    "errors" => [
+                        [
+                            "code" => "H097",
+                            "message" => "İzin sorgulama isteği geçerli olmalıdır."
+                        ]
+                    ]
+                ]], 400),
+            ]);
+
+        $this->expectException(RequestException::class);
+
+        IysManager::make()->createPermissionDriver()->getChangedPermissions();
+    }
 }

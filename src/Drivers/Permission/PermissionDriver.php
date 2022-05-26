@@ -67,6 +67,23 @@ class PermissionDriver extends AbstractDriver
            ->throw();
     }
 
+    /**
+     * @throws RequestException
+     */
+    public function getPermissionStatus(Permission $permission)
+    {
+        $permissionData = $permission->toArray();
+
+        return Http::timeout($this->timeout)
+            ->withToken($this->bearer)->asJson()->acceptJson()
+            ->post($this->buildUrl("consents/status"), [
+                "recipient" => $permissionData['recipient'],
+                "recipientType" => $permissionData['recipientType'],
+                "type" => $permissionData['type']
+            ])
+            ->throw();
+    }
+
     private function buildUrl(string $api): string
     {
         return sprintf('%s/sps/%s/brands/%s/%s', $this->baseUrl, $this->iysCode, $this->branchCode, $api);
