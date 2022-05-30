@@ -1,5 +1,12 @@
 ## Contents
 
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/macellan/iys.svg?style=flat-square)](https://packagist.org/packages/macellan/onesignal)
+[![Build Status](https://scrutinizer-ci.com/g/macellan/iys/badges/build.png?b=main)](https://scrutinizer-ci.com/g/macellan/iys/build-status/main)
+[![StyleCI](https://github.styleci.io/repos/463069750/shield?branch=main)](https://github.styleci.io/repos/463069750?branch=main)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/macellan/iys/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/macellan/iys/?branch=main)
+[![Code Coverage](https://scrutinizer-ci.com/g/macellan/iys/badges/coverage.png?b=main)](https://scrutinizer-ci.com/g/macellan/iys/?branch=main)
+[![Total Downloads](https://img.shields.io/packagist/dt/macellan/iys.svg?style=flat-square)](https://packagist.org/packages/macellan/iys)
+
 - [Installation](#installation)
     - [Setting up the Iys service](#setting-up-the-IYS-service)
 - [Enums](#enums)
