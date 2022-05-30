@@ -17,7 +17,7 @@ class PermissionDriver extends AbstractDriver
     /**
      * @throws RequestException
      */
-    public function sendSinglePermission(Permission $permission)
+    public function sendSingle(Permission $permission)
     {
         return Http::timeout($this->timeout)
             ->withToken($this->bearer)->asJson()->acceptJson()
@@ -28,7 +28,7 @@ class PermissionDriver extends AbstractDriver
     /**
      * @throws RequestException
      */
-    public function sendPermissions(PermissionList $permissionList)
+    public function sendMultiple(PermissionList $permissionList)
     {
         return Http::timeout($this->timeout)
             ->withToken($this->bearer)->asJson()->acceptJson()
@@ -39,7 +39,7 @@ class PermissionDriver extends AbstractDriver
     /**
      * @throws RequestException
      */
-    public function getPermissionsStatus(string $requestId)
+    public function getStatusByRequestId(string $requestId)
     {
         return Http::timeout($this->timeout)
             ->withToken($this->bearer)->asJson()->acceptJson()
@@ -50,7 +50,7 @@ class PermissionDriver extends AbstractDriver
     /**
      * @throws RequestException
      */
-    public function getChangedPermissions(?string $after = null, SourceTypes $source = SourceTypes::IYS, int $limit = 999)
+    public function getChanges(?string $after = null, SourceTypes $source = SourceTypes::IYS, int $limit = 999)
     {
         $query = [
            'source' => $source->value,
@@ -70,7 +70,7 @@ class PermissionDriver extends AbstractDriver
     /**
      * @throws RequestException
      */
-    public function getPermissionStatus(Permission $permission)
+    public function getStatus(Permission $permission)
     {
         $permissionData = $permission->toArray();
 

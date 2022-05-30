@@ -104,7 +104,7 @@ Authentication token is generated per UserManager instance. Expire time is two h
 With the usage in this example, you can submit a single release. This method works with the "Permission" model
 
 ```php
-    IysManager::make()->createPermissionDriver()->sendSinglePermission(
+    IysManager::make()->createPermissionDriver()->sendSingle(
             Permission::make()
                 ->setConsentDate('2022-02-10 09:50:02')
                 ->setSource(ConsentSourceTypes::MOBILE)
@@ -134,24 +134,24 @@ You can send permissions by filling out the permission list model. The permissio
             ->setSource(ConsentSourceTypes::MOBILE)
             ->setRecipientType(RecipientTypes::INDIVIDUAL);
 
-    IysManager::make()->createPermissionDriver()->sendPermissions($permissionList);
+    IysManager::make()->createPermissionDriver()->sendMultiple($permissionList);
 ```
 
 You can get send permission information with request id
 
 ```php
-   IysManager::make()->createPermissionDriver()->getPermissionsStatus('request_id');
+   IysManager::make()->createPermissionDriver()->getStatusByRequestId('request_id');
 ```
 You can get changed permission by IYS
 
 ```php
-   IysManager::make()->createPermissionDriver()->getChangedPermissions();
+   IysManager::make()->createPermissionDriver()->getChanges();
 ```
 
 You can get permission status by permission model
 
 ```php
-    IysManager::make()->createPermissionDriver()->getPermissionStatus(
+    IysManager::make()->createPermissionDriver()->getStatus(
             Permission::make()
                 ->setConsentDate('2022-02-10 09:50:02')
                 ->setSource(ConsentSourceTypes::MOBILE)

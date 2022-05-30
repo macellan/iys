@@ -51,7 +51,7 @@ class PermissionDriverTest extends TestCase
             ]),
         ]);
 
-        IysManager::make()->createPermissionDriver()->sendSinglePermission(
+        IysManager::make()->createPermissionDriver()->sendSingle(
             Permission::make()
                  ->setConsentDate($consentDate)
                  ->setSource(ConsentSourceTypes::MOBILE)
@@ -99,7 +99,7 @@ class PermissionDriverTest extends TestCase
 
         $this->expectException(RequestException::class);
 
-        IysManager::make()->createPermissionDriver()->sendSinglePermission(
+        IysManager::make()->createPermissionDriver()->sendSingle(
             Permission::make()
                 ->setConsentDate($consentDate)
                 ->setSource(ConsentSourceTypes::MOBILE)
@@ -171,7 +171,7 @@ class PermissionDriverTest extends TestCase
                    ->setStatus(StatusTypes::REJECT)
                    ->setType(PermissionTypes::MESSAGE));
 
-        IysManager::make()->createPermissionDriver()->sendPermissions($permissionList);
+        IysManager::make()->createPermissionDriver()->sendMultiple($permissionList);
 
         Http::assertSent(function (Request $request) use ($endpoint, $recipientFirst, $recipientSecond, $consentDate) {
             return $request->url() == $this->url . $endpoint &&
@@ -235,7 +235,7 @@ class PermissionDriverTest extends TestCase
 
         $this->expectException(RequestException::class);
 
-        IysManager::make()->createPermissionDriver()->sendPermissions($permissionList);
+        IysManager::make()->createPermissionDriver()->sendMultiple($permissionList);
     }
 
     /**
@@ -281,7 +281,7 @@ class PermissionDriverTest extends TestCase
 
         $this->createHttpFakeToken();
 
-        IysManager::make()->createPermissionDriver()->getPermissionsStatus($requestId);
+        IysManager::make()->createPermissionDriver()->getStatusByRequestId($requestId);
 
         Http::assertSent(function (Request $request) use ($endpoint) {
             return $request->url() == $this->url . $endpoint;
@@ -313,7 +313,7 @@ class PermissionDriverTest extends TestCase
 
         $this->expectException(RequestException::class);
 
-        IysManager::make()->createPermissionDriver()->getChangedPermissions();
+        IysManager::make()->createPermissionDriver()->getChanges();
     }
 
     /**
@@ -350,7 +350,7 @@ class PermissionDriverTest extends TestCase
                 ]
             )]);
 
-        IysManager::make()->createPermissionDriver()->getChangedPermissions();
+        IysManager::make()->createPermissionDriver()->getChanges();
 
         Http::assertSent(function (Request $request) use ($endpoint) {
             return $request->url() == $this->url . $endpoint;
@@ -394,7 +394,7 @@ class PermissionDriverTest extends TestCase
                 ]
             )]);
 
-        IysManager::make()->createPermissionDriver()->getChangedPermissions($after, SourceTypes::HS, $limit);
+        IysManager::make()->createPermissionDriver()->getChanges($after, SourceTypes::HS, $limit);
 
         Http::assertSent(function (Request $request) use ($endpoint) {
             return $request->url() == $this->url . $endpoint;
@@ -431,7 +431,7 @@ class PermissionDriverTest extends TestCase
 
         $this->expectException(RequestException::class);
 
-        IysManager::make()->createPermissionDriver()->getChangedPermissions();
+        IysManager::make()->createPermissionDriver()->getChanges();
     }
 
     /**
@@ -463,7 +463,7 @@ class PermissionDriverTest extends TestCase
                 ])
             ]);
 
-        IysManager::make()->createPermissionDriver()->getPermissionStatus(Permission::make()
+        IysManager::make()->createPermissionDriver()->getStatus(Permission::make()
             ->setConsentDate($consentDate)
             ->setSource(ConsentSourceTypes::MOBILE)
             ->setRecipient($recipient)
@@ -499,6 +499,6 @@ class PermissionDriverTest extends TestCase
 
         $this->expectException(RequestException::class);
 
-        IysManager::make()->createPermissionDriver()->getChangedPermissions();
+        IysManager::make()->createPermissionDriver()->getChanges();
     }
 }
