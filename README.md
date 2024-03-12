@@ -1,8 +1,10 @@
-## Contents
+## IYS
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/macellan/iys.svg?style=flat-square)](https://packagist.org/packages/macellan/onesignal)
-[![StyleCI](https://github.styleci.io/repos/463069750/shield?branch=main)](https://github.styleci.io/repos/463069750?branch=main)
-[![Total Downloads](https://img.shields.io/packagist/dt/macellan/iys.svg?style=flat-square)](https://packagist.org/packages/macellan/iys)
+
+![Tests](https://github.com/macellan/onesignal/actions/workflows/tests.yml/badge.svg)
+[![Latest Stable Version](https://poser.pugx.org/macellan/onesignal/v/stable)](https://packagist.org/packages/macellan/onesignal)
+[![Total Downloads](https://poser.pugx.org/macellan/onesignal/downloads)](https://packagist.org/packages/macellan/onesignal)
+
 
 - [Installation](#installation)
     - [Setting up the Iys service](#setting-up-the-IYS-service)
