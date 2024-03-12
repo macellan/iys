@@ -1,9 +1,9 @@
 ## IYS
 
 
-![Tests](https://github.com/macellan/onesignal/actions/workflows/tests.yml/badge.svg)
-[![Latest Stable Version](https://poser.pugx.org/macellan/onesignal/v/stable)](https://packagist.org/packages/macellan/onesignal)
-[![Total Downloads](https://poser.pugx.org/macellan/onesignal/downloads)](https://packagist.org/packages/macellan/onesignal)
+![Tests](https://github.com/macellan/iys/actions/workflows/tests.yml/badge.svg)
+[![Latest Stable Version](https://poser.pugx.org/macellan/iys/v/stable)](https://packagist.org/packages/macellan/iys)
+[![Total Downloads](https://poser.pugx.org/macellan/iys/downloads)](https://packagist.org/packages/macellan/iys)
 
 
 - [Installation](#installation)
