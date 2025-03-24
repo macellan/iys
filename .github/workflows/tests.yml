@@ -13,11 +13,9 @@ jobs:
       matrix:
         php: [ 8.2, 8.3, 8.4 ]
         laravel: [ 12 ]
-        dependencies:
-          - "lowest"
-          - "highest"
+        stability: [ prefer-lowest, prefer-stable ]
     
-    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }} ${{ matrix.dependencies == 'highest' && '↑' || '↓' }}
+    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }} ${{ matrix.stability == 'prefer-stable' && '↑' || '↓' }}
 
     steps:
       - name: Checkout code
