@@ -13,14 +13,14 @@
         "php": ">=8.2",
         "ext-json": "*",
         "guzzlehttp/guzzle": "^7.2|^7.0.1",
-        "illuminate/http": "^10.0|^11.0|^12.0",
-        "illuminate/support": "^10.0|^11.0|^12.0"
+        "illuminate/http": "^11.0|^12.0",
+        "illuminate/support": "^11.0|^12.0"
     },
     "require-dev": {
         "larastan/larastan": "^3.2",
         "laravel/pint": "^1.21",
         "mockery/mockery": "^1.6.9",
-        "orchestra/testbench": "^7.1|^8.0|^9.0|^10.0",
+        "orchestra/testbench": "^8.0|^9.0|^10.0",
         "phpunit/phpunit": "^10.1|^11.0|^12.0"
     },
     "autoload": {
