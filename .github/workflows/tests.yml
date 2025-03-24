@@ -15,7 +15,7 @@ jobs:
         laravel: [ 12 ]
         stability: [ prefer-lowest, prefer-stable ]
     
-    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }} ${{ matrix.stability == 'prefer-stable' && '↑' || '↓' }}
+    name: "PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }} ${{ matrix.stability == 'prefer-stable' && '↑' || '↓' }}"
 
     steps:
       - name: Checkout code
