@@ -22,7 +22,7 @@ class Auth
 
         $this->password = $config[Config::PASSWORD->value];
 
-        $this->endPoint = $config[Config::URL->value] . '/oauth2/token';
+        $this->endPoint = $config[Config::URL->value].'/oauth2/token';
     }
 
     /**

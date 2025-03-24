@@ -2,9 +2,9 @@
 
 namespace Macellan\Iys\Tests;
 
+use Macellan\Iys\Drivers\Permission\Enums\ConsentSourceTypes;
 use Macellan\Iys\Drivers\Permission\Enums\PermissionTypes;
 use Macellan\Iys\Drivers\Permission\Enums\RecipientTypes;
-use Macellan\Iys\Drivers\Permission\Enums\ConsentSourceTypes;
 use Macellan\Iys\Drivers\Permission\Enums\StatusTypes;
 use Macellan\Iys\Drivers\Permission\Models\Permission;
 

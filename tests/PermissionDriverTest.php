@@ -6,13 +6,13 @@ use Illuminate\Http\Client\Request;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
+use Macellan\Iys\Drivers\Permission\Enums\ConsentSourceTypes;
 use Macellan\Iys\Drivers\Permission\Enums\PermissionTypes;
 use Macellan\Iys\Drivers\Permission\Enums\RecipientTypes;
-use Macellan\Iys\Drivers\Permission\Enums\ConsentSourceTypes;
-use Macellan\Iys\Drivers\Permission\Enums\StatusTypes;
 use Macellan\Iys\Drivers\Permission\Enums\SourceTypes;
-use Macellan\Iys\Drivers\Permission\Models\PermissionList;
+use Macellan\Iys\Drivers\Permission\Enums\StatusTypes;
 use Macellan\Iys\Drivers\Permission\Models\Permission;
+use Macellan\Iys\Drivers\Permission\Models\PermissionList;
 use Macellan\Iys\IysManager;
 
 class PermissionDriverTest extends TestCase
@@ -32,6 +32,7 @@ class PermissionDriverTest extends TestCase
 
     /**
      * @return void
+     *
      * @throws RequestException
      */
     public function test_can_send_permission()
@@ -45,24 +46,24 @@ class PermissionDriverTest extends TestCase
         $this->createHttpFakeToken();
 
         Http::fake([
-          $endpoint => Http::response([
-                    'transaction_id' => '162cc155429fdccd7f2be8e9482aa322993ff210c2923fb84e8ed0fb1902ae21',
-                    'creationDate' => '2020-08-06 15:50:23',
+            $endpoint => Http::response([
+                'transaction_id' => '162cc155429fdccd7f2be8e9482aa322993ff210c2923fb84e8ed0fb1902ae21',
+                'creationDate' => '2020-08-06 15:50:23',
             ]),
         ]);
 
         IysManager::make()->createPermissionDriver()->sendSingle(
             Permission::make()
-                 ->setConsentDate($consentDate)
-                 ->setSource(ConsentSourceTypes::MOBILE)
-                 ->setRecipient($recipient)
-                 ->setRecipientType(RecipientTypes::INDIVIDUAL)
-                 ->setStatus(StatusTypes::APPROVE)
-                 ->setType(PermissionTypes::EMAIL)
+                ->setConsentDate($consentDate)
+                ->setSource(ConsentSourceTypes::MOBILE)
+                ->setRecipient($recipient)
+                ->setRecipientType(RecipientTypes::INDIVIDUAL)
+                ->setStatus(StatusTypes::APPROVE)
+                ->setType(PermissionTypes::EMAIL)
         );
 
         Http::assertSent(function (Request $request) use ($endpoint, $recipient, $consentDate) {
-            return $request->url() == $this->url . $endpoint &&
+            return $request->url() == $this->url.$endpoint &&
                 $request['consentDate'] == $consentDate &&
                 $request['source'] == ConsentSourceTypes::MOBILE->value &&
                 $request['recipient'] == $recipient &&
@@ -74,6 +75,7 @@ class PermissionDriverTest extends TestCase
 
     /**
      * @return void
+     *
      * @throws RequestException
      */
     public function test_throw_exception_send_permission()
@@ -88,12 +90,12 @@ class PermissionDriverTest extends TestCase
 
         Http::fake([
             $endpoint => Http::response([
-                "errors" => [
+                'errors' => [
                     [
-                        "message" => "Eksik veya geçersiz jeton!",
-                        "code" => "H351",
-                    ]
-                ]
+                        'message' => 'Eksik veya geçersiz jeton!',
+                        'code' => 'H351',
+                    ],
+                ],
             ], 401),
         ]);
 
@@ -112,6 +114,7 @@ class PermissionDriverTest extends TestCase
 
     /**
      * @return void
+     *
      * @throws RequestException
      */
     public function test_can_send_permissions()
@@ -144,7 +147,7 @@ class PermissionDriverTest extends TestCase
 
                     ],
                 ]
-            )
+            ),
         ]);
 
         $recipientFirst = 'test@example1.com';
@@ -155,26 +158,25 @@ class PermissionDriverTest extends TestCase
 
         $this->createHttpFakeToken();
 
-
         $permission = Permission::make()
             ->setConsentDate($consentDate)
             ->setSource(ConsentSourceTypes::MOBILE)
             ->setRecipientType(RecipientTypes::INDIVIDUAL);
 
-         $permissionList =  PermissionList::make()
-               ->addPermission($permission
-                   ->setRecipient($recipientFirst)
-                   ->setStatus(StatusTypes::APPROVE)
-                   ->setType(PermissionTypes::EMAIL))
-               ->addPermission($permission
-                   ->setRecipient($recipientSecond)
-                   ->setStatus(StatusTypes::REJECT)
-                   ->setType(PermissionTypes::MESSAGE));
+        $permissionList = PermissionList::make()
+            ->addPermission($permission
+                ->setRecipient($recipientFirst)
+                ->setStatus(StatusTypes::APPROVE)
+                ->setType(PermissionTypes::EMAIL))
+            ->addPermission($permission
+                ->setRecipient($recipientSecond)
+                ->setStatus(StatusTypes::REJECT)
+                ->setType(PermissionTypes::MESSAGE));
 
         IysManager::make()->createPermissionDriver()->sendMultiple($permissionList);
 
         Http::assertSent(function (Request $request) use ($endpoint, $recipientFirst, $recipientSecond, $consentDate) {
-            return $request->url() == $this->url . $endpoint &&
+            return $request->url() == $this->url.$endpoint &&
                 $request[0]['consentDate'] == $consentDate &&
                 $request[0]['recipient'] == $recipientFirst &&
                 $request[0]['source'] == ConsentSourceTypes::MOBILE->value &&
@@ -192,6 +194,7 @@ class PermissionDriverTest extends TestCase
 
     /**
      * @return void
+     *
      * @throws RequestException
      */
     public function test_throw_exception_send_permissions()
@@ -202,13 +205,13 @@ class PermissionDriverTest extends TestCase
 
         Http::fake([
             $endpoint => Http::response([
-                "errors" => [
+                'errors' => [
                     [
-                        "code" => "H124",
-                        "message" => "Saniyede kabul edilen istek limitine ulaşıldı. Lütfen daha sonra 
-                        tekrar deneyiniz."
-                    ]
-                ]
+                        'code' => 'H124',
+                        'message' => 'Saniyede kabul edilen istek limitine ulaşıldı. Lütfen daha sonra 
+                        tekrar deneyiniz.',
+                    ],
+                ],
             ], 429),
         ]);
 
@@ -223,7 +226,7 @@ class PermissionDriverTest extends TestCase
             ->setSource(ConsentSourceTypes::MOBILE)
             ->setRecipientType(RecipientTypes::INDIVIDUAL);
 
-        $permissionList =  PermissionList::make()
+        $permissionList = PermissionList::make()
             ->addPermission($permission
                 ->setRecipient($recipientFirst)
                 ->setStatus(StatusTypes::APPROVE)
@@ -240,6 +243,7 @@ class PermissionDriverTest extends TestCase
 
     /**
      * @return void
+     *
      * @throws RequestException
      */
     public function test_get_status_permissions()
@@ -252,44 +256,44 @@ class PermissionDriverTest extends TestCase
             $endpoint => Http::response(
                 [
                     [
-                        "subRequestId" => "cf15b6bf-1b84-4e59-b5bb-bda95de5c1cf",
-                        "index" => 0,
-                        "status" => "failure",
-                        "error" => [
-                            "code" => "H175",
-                            "message" => "İlk izin kayıt işlemlerinde RET durum (status) bilgisi 
-                            içeren izinler kaydedilmez.",
-                        ]
+                        'subRequestId' => 'cf15b6bf-1b84-4e59-b5bb-bda95de5c1cf',
+                        'index' => 0,
+                        'status' => 'failure',
+                        'error' => [
+                            'code' => 'H175',
+                            'message' => 'İlk izin kayıt işlemlerinde RET durum (status) bilgisi 
+                            içeren izinler kaydedilmez.',
+                        ],
                     ],
                     [
-                        "requestId" => "548014a006fb33c6wb1a0a1b0vebs5ae",
-                        "subRequestId" => "2666eb07-cbc9-4069-bc6e-4eeb1a48991f",
-                        "index" => 1,
-                        "transactionId" => "432cc155429fdccd7f2be8e9482aa322993ff210c2923fb84e8ed0fb1902ae21",
-                        "status" => "success",
-                        "creationDate" => "2020-08-21 14:45:24",
+                        'requestId' => '548014a006fb33c6wb1a0a1b0vebs5ae',
+                        'subRequestId' => '2666eb07-cbc9-4069-bc6e-4eeb1a48991f',
+                        'index' => 1,
+                        'transactionId' => '432cc155429fdccd7f2be8e9482aa322993ff210c2923fb84e8ed0fb1902ae21',
+                        'status' => 'success',
+                        'creationDate' => '2020-08-21 14:45:24',
                     ],
                     [
-                        "index" => 2,
-                        "status" => "enqueue",
-                        "subrequestId" => "7ed0f89d-15c7-457f-a16a-d689ef5dca62",
+                        'index' => 2,
+                        'status' => 'enqueue',
+                        'subrequestId' => '7ed0f89d-15c7-457f-a16a-d689ef5dca62',
                     ],
                 ]
-            )
+            ),
         ]);
-
 
         $this->createHttpFakeToken();
 
         IysManager::make()->createPermissionDriver()->getStatusByRequestId($requestId);
 
         Http::assertSent(function (Request $request) use ($endpoint) {
-            return $request->url() == $this->url . $endpoint;
+            return $request->url() == $this->url.$endpoint;
         });
     }
 
     /**
      * @return void
+     *
      * @throws RequestException
      */
     public function test_throw_exception_get_status_permissions()
@@ -302,11 +306,11 @@ class PermissionDriverTest extends TestCase
 
         Http::fake([
             $endpoint => Http::response([
-                "errors" => [
+                'errors' => [
                     [
-                        "code" => "H103",
-                        "message" => "Sunucuda arama yapılamadı.",
-                    ]
+                        'code' => 'H103',
+                        'message' => 'Sunucuda arama yapılamadı.',
+                    ],
                 ],
             ], 500),
         ]);
@@ -318,6 +322,7 @@ class PermissionDriverTest extends TestCase
 
     /**
      * @return void
+     *
      * @throws RequestException
      */
     public function test_get_changed_permissions()
@@ -353,7 +358,7 @@ class PermissionDriverTest extends TestCase
         IysManager::make()->createPermissionDriver()->getChanges();
 
         Http::assertSent(function (Request $request) use ($endpoint) {
-            return $request->url() == $this->url . $endpoint;
+            return $request->url() == $this->url.$endpoint;
         });
     }
 
@@ -397,12 +402,13 @@ class PermissionDriverTest extends TestCase
         IysManager::make()->createPermissionDriver()->getChanges($after, SourceTypes::HS, $limit);
 
         Http::assertSent(function (Request $request) use ($endpoint) {
-            return $request->url() == $this->url . $endpoint;
+            return $request->url() == $this->url.$endpoint;
         });
     }
 
     /**
      * @return void
+     *
      * @throws RequestException
      */
     public function test_throw_exception_get_changed_permissions()
@@ -419,15 +425,15 @@ class PermissionDriverTest extends TestCase
 
         Http::fake([
             $endpoint => Http::response([
-                "errors" => [
+                'errors' => [
                     [
-                        "location" => [],
-                        "code" => "H168",
-                        "message" => "Alıcı listesi (recipients) bulunamadı.",
-                    ]
-                ]
+                        'location' => [],
+                        'code' => 'H168',
+                        'message' => 'Alıcı listesi (recipients) bulunamadı.',
+                    ],
+                ],
             ], 422),
-         ]);
+        ]);
 
         $this->expectException(RequestException::class);
 
@@ -449,19 +455,19 @@ class PermissionDriverTest extends TestCase
 
         Http::fake([
             $endpoint => Http::response([
-                    'consentDate' => $consentDate,
-                    'source' => ConsentSourceTypes::MOBILE,
-                    'recipientType' => RecipientTypes::INDIVIDUAL,
-                    'status' => StatusTypes::APPROVE,
-                    'type' => PermissionTypes::EMAIL,
-                    'recipient' => $recipient,
-                    'retailerCode' => 55550127,
-                    'creationDate' => '2020-08-06 15:50:23',
-                    'retailerTitle' => 'Test Company',
-                    'retailerAccessCount' => 3,
-                    'transactionId' => 'abc623z3cq4bhac9b88dadd49b767a2322be140a9n9cuc25abf1ac5392c4ca12',
-                ])
-            ]);
+                'consentDate' => $consentDate,
+                'source' => ConsentSourceTypes::MOBILE,
+                'recipientType' => RecipientTypes::INDIVIDUAL,
+                'status' => StatusTypes::APPROVE,
+                'type' => PermissionTypes::EMAIL,
+                'recipient' => $recipient,
+                'retailerCode' => 55550127,
+                'creationDate' => '2020-08-06 15:50:23',
+                'retailerTitle' => 'Test Company',
+                'retailerAccessCount' => 3,
+                'transactionId' => 'abc623z3cq4bhac9b88dadd49b767a2322be140a9n9cuc25abf1ac5392c4ca12',
+            ]),
+        ]);
 
         IysManager::make()->createPermissionDriver()->getStatus(Permission::make()
             ->setConsentDate($consentDate)
@@ -472,7 +478,7 @@ class PermissionDriverTest extends TestCase
             ->setType(PermissionTypes::EMAIL));
 
         Http::assertSent(function (Request $request) use ($endpoint, $recipient) {
-            return $request->url() == $this->url . $endpoint &&
+            return $request->url() == $this->url.$endpoint &&
                 $request['recipient'] == $recipient &&
                 $request['recipientType'] == RecipientTypes::INDIVIDUAL->value &&
                 $request['type'] == PermissionTypes::EMAIL->value;
@@ -488,14 +494,14 @@ class PermissionDriverTest extends TestCase
         Http::fake([
             $endpoint => Http::response([
                 [
-                    "errors" => [
+                    'errors' => [
                         [
-                            "code" => "H097",
-                            "message" => "İzin sorgulama isteği geçerli olmalıdır."
-                        ]
-                    ]
+                            'code' => 'H097',
+                            'message' => 'İzin sorgulama isteği geçerli olmalıdır.',
+                        ],
+                    ],
                 ]], 400),
-            ]);
+        ]);
 
         $this->expectException(RequestException::class);
 

@@ -7,8 +7,8 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use Macellan\Iys\Drivers\AbstractDriver;
 use Macellan\Iys\Drivers\Permission\Enums\SourceTypes;
-use Macellan\Iys\Drivers\Permission\Models\PermissionList;
 use Macellan\Iys\Drivers\Permission\Models\Permission;
+use Macellan\Iys\Drivers\Permission\Models\PermissionList;
 
 class PermissionDriver extends AbstractDriver
 {
@@ -53,8 +53,8 @@ class PermissionDriver extends AbstractDriver
     public function getChanges(?string $after = null, SourceTypes $source = SourceTypes::IYS, int $limit = 999)
     {
         $query = [
-           'source' => $source->value,
-           'limit'  => $limit,
+            'source' => $source->value,
+            'limit' => $limit,
         ];
 
         if ($after) {
@@ -62,9 +62,9 @@ class PermissionDriver extends AbstractDriver
         }
 
         return Http::timeout($this->timeout)
-           ->withToken($this->bearer)->asJson()->acceptJson()
-           ->get($this->buildUrl('consents/changes?' . Arr::query($query)))
-           ->throw();
+            ->withToken($this->bearer)->asJson()->acceptJson()
+            ->get($this->buildUrl('consents/changes?'.Arr::query($query)))
+            ->throw();
     }
 
     /**
@@ -76,10 +76,10 @@ class PermissionDriver extends AbstractDriver
 
         return Http::timeout($this->timeout)
             ->withToken($this->bearer)->asJson()->acceptJson()
-            ->post($this->buildUrl("consents/status"), [
-                "recipient" => $permissionData['recipient'],
-                "recipientType" => $permissionData['recipientType'],
-                "type" => $permissionData['type']
+            ->post($this->buildUrl('consents/status'), [
+                'recipient' => $permissionData['recipient'],
+                'recipientType' => $permissionData['recipientType'],
+                'type' => $permissionData['type'],
             ])
             ->throw();
     }

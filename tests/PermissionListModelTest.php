@@ -2,9 +2,9 @@
 
 namespace Macellan\Iys\Tests;
 
+use Macellan\Iys\Drivers\Permission\Enums\ConsentSourceTypes;
 use Macellan\Iys\Drivers\Permission\Enums\PermissionTypes;
 use Macellan\Iys\Drivers\Permission\Enums\RecipientTypes;
-use Macellan\Iys\Drivers\Permission\Enums\ConsentSourceTypes;
 use Macellan\Iys\Drivers\Permission\Enums\StatusTypes;
 use Macellan\Iys\Drivers\Permission\Models\Permission;
 use Macellan\Iys\Drivers\Permission\Models\PermissionList;
@@ -24,7 +24,6 @@ class PermissionListModelTest extends TestCase
             ->setRecipient($recipientFirst)
             ->setStatus(StatusTypes::APPROVE)
             ->setType(PermissionTypes::EMAIL);
-
 
         $recipientSecond = 'test@example1.com';
 
@@ -69,7 +68,7 @@ class PermissionListModelTest extends TestCase
                 'type' => PermissionTypes::CALL->value,
                 'retailerCode' => $retailerCode,
                 'retailerAccess' => $retailerAccess,
-            ]
+            ],
         ], $permissionList->toArray());
     }
 }

@@ -19,12 +19,12 @@ class IysManager
      */
     public function __construct()
     {
-        if (!  $this->config = config('services.iys')) {
+        if (! $this->config = config('services.iys')) {
             throw new Exception('Iys configuration not found.');
         }
 
         if ($diff = array_diff(Config::toArray(), array_keys($this->config))) {
-            throw new Exception(implode(',', $diff) . ' configuration parameter not found.');
+            throw new Exception(implode(',', $diff).' configuration parameter not found.');
         }
 
         $result = (new Auth($this->config))->login();
@@ -39,6 +39,6 @@ class IysManager
 
     public static function make(): IysManager
     {
-        return new static();
+        return new self;
     }
 }

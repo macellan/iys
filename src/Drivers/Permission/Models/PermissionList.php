@@ -25,6 +25,6 @@ class PermissionList implements InterfaceModel
 
     public static function make(): PermissionList
     {
-        return new static();
+        return new self;
     }
 }

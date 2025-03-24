@@ -30,12 +30,12 @@ class AuthTest extends TestCase
             'username' => $this->username,
             'password' => $this->password,
             'url' => $this->url,
-         ];
+        ];
 
         (new Auth($config))->login();
 
         Http::assertSent(function (Request $request) use ($endpoint) {
-            return $request->url() == $this->url . $endpoint &&
+            return $request->url() == $this->url.$endpoint &&
                 $request['username'] == $this->username &&
                 $request['password'] == $this->password &&
                 $request['grant_type'] == 'password';
@@ -44,14 +44,15 @@ class AuthTest extends TestCase
 
     /**
      * @return void
+     *
      * @throws RequestException
      */
     public function test_throws_an_exception()
     {
         Http::fake([
             '/oauth2/token' => Http::response([
-                "error" => "invalid_request",
-                "error_description" =>  "Giriş yöntemi belirtilmemiş."
+                'error' => 'invalid_request',
+                'error_description' => 'Giriş yöntemi belirtilmemiş.',
             ], 400),
         ]);
 
