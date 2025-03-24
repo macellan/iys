@@ -1,6 +1,8 @@
 name: Tests
 
 on:
+  push:
+  pull_request:
   schedule:
     - cron: '0 0 * * 1'
 
@@ -15,7 +17,7 @@ jobs:
         laravel: [ 12 ]
         stability: [ prefer-lowest, prefer-stable ]
     
-    name: "PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }} ${{ matrix.stability == 'prefer-stable' && '↑' || '↓' }}"
+    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }} ${{ matrix.stability == 'prefer-stable' && '↑' || '↓' }}
 
     steps:
       - name: Checkout code
