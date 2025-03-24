@@ -20,7 +20,7 @@
         "larastan/larastan": "^3.2",
         "laravel/pint": "^1.21",
         "mockery/mockery": "^1.6.9",
-        "orchestra/testbench": "^9.0|^10.0",
+        "orchestra/testbench": "^10.0",
         "phpunit/phpunit": "^10.5.35|^11.3.6"
     },
     "autoload": {
